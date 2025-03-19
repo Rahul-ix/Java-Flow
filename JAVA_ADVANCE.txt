@@ -1,0 +1,168 @@
+----JAVA ADVANCE--------------
+-JDBC
+-WebServlet
+-jsp
+-MVC
+-------------JDBC---------------------------------------
+Java Database connection
+-we use here MySQL connector j which help us to connect java to database
+ex        javaCode-----------[Mysql-connector-j]------------DATABASE(MYSQL)
+
+step1
+ ----path--------
+
+     Class.forName("com.mysql.cj.jdbc.Driver");
+
+step2        
+----------------jdbc connection-------
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3307/db","root","password");
+        Statement stm =con.createStatement();
+----------write query-----------------------
+        stm.executeUpdate(-------write query here create/update/delete----);
+
+      or
+   
+      ResultSet res = executeQuery(----write here read quey-----)
+-----------------close connection--------------
+        con.close
+NOTE: executeUpdate()--->create , update , delete
+      executeQuery()----> read
+
+-------------ends JDBC---------------------------------------
+                 ******
+
+------------WebServlet------------------------------
+tomcat : tomcat will run servlet, spring boot hibernate ,  api etc
+webserver: it will run Nginx it will run html css frontend technology
+Dynamic application : which means database and backend contains
+static application : only frontend technology
+
+Servlet : it is a special java class,it can read from html and capable write back to html
+
+servlet------>HttpServlet------>GenericServlet
+
+create/update/delete
+html(form )------>webservlet (post)-----JDBC-------->>DB
+
+you need to follow below step to use Create , update , delete
+step 1: MySQL connector j in lib folder use version 5 or below
+step 2: configure MySQL connect-j in properties
+step 3: create servlet class
+step 4: go to post method
+step 5: define path MySQL connector j
+        ----path--------
+        Class.forName("com.mysql.cj.jdbc.Driver");
+        
+----------------jdbc connection-------
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3307/db","root","password");
+        Statement stm =con.createStatement();
+----------write query-----------------------
+        stm.executeUpdate(-------write query here create/update/delete----);
+-----------------close connection--------------
+        con.close
+
+read
+WebServlet(get)----->java(write html in java) /write in separate html
+ ----path--------
+        Class.forName("com.mysql.cj.jdbc.Driver");
+-----write html code in java----------------
+        response.setContentType("text/html");
+        PrintWriter out = new PrintWriter();
+        
+----------------jdbc connection-------
+        Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3307/db","root","password");
+        Statement stm =con.createStatement();
+----------write query-----------------------
+        ResultSet result=stm.executeUpdate(-------write query here create/update/delete----);
+        while(result.next()){
+         res.getString(1);
+         res.getString(2); ////etc
+    }
+-----------------close connection--------------
+        con.close
+
+
+
+POST:-Data is coming from html to backend
+     -secure, no data visible, re-submission not allowed here
+
+GET:  -Data is coming from backend to html
+      -no secure, data visible, re-submission allowed here
+
+------------------------ends WebServlet---------------------------------------------------------
+                             ******
+
+-------------------------------JSP-----------------------------------------------------------------
+Java servlet page / Jakarta servlet page
+
+[html code]
+
+[java code]---->fix java code-----------> servlet------->Tomcat
+
+[html code]
+
+
+.jsp            jsp translator            servlet
+
+overview: jsp contains partial java code and that fixes by jsp translator after it will gives to servlet and then tomcat servlet run
+
+Tags in jsp
+-Scriplte Tag : it uses inbuilt/implicit objects like out.println <%  int x=10 ; out.println(x);  %> 
+- Declaration Tag: you cannot use here inbuilt/implicit objects like out.println <%! public int x=10; %>
+-Expression Tag: you cannot use semicolon and more than one statement <%= x %>
+-Directive Tag:  1) Page Directive:  <%@ import   %>
+                                    <%= new Date %>
+                 2) Include Directive:  <%@ include file ="menu.jsp" %>
+
+
+--------------------ends JSP---------------------------------------------------------------------------------------------------
+                         ******
+------------------JSP using MVC---------------------------------------------------------
+MVC----Model(model/sevice-layer), view(html/jsp/angular) ,controller(webservlet)
+
+view-------------Conctroller-------------------model
+
+follow same what we used in webservlet like
+model----create service layer
+view ----Jsp
+controller----webservlet
+
+-----------------how to create logout?--------------------------
+HttpSession session = request.getSession(true);//object is create you use this in login
+session.setAttribte(email,"email");
+
+HttpSession session = request.getSession(false);//object is destroyed 
+session.invalidate();
+------------------------------------------------------------------------------
+session time out
+session.setMaxInactiveInterval(10);//it will autimatically logout  after 10 seconds
+
+-----------------------------------------------------------
+servlet life cycle
+servlet---------->Tomcat-----> init (only once)
+
+                               public void init(){
+                               sop("init method started");
+                                }
+
+                               doGet,doPost( as many you wants)
+
+                               public void destroy(){
+                               sop("destroy method ended");
+                                }
+                               destroy(only once)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

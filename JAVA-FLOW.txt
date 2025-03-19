@@ -1,0 +1,30 @@
+JAVA-
+----java core
+----java advance (jdbc, webServlet, Unit testing , jsp)
+----collection
+----Date concept
+----java 8
+----spring boot + Hibernate + jsp
+----rest api( + custom exception)
+----spring security
+
+Tools-
+-----Terraform
+-----Kafka
+-----maven
+-----GitHub
+
+cloud-
+-----Linux
+-----shell script
+-----AWS
+
+
+Database-
+------MySQL
+
+frontend-
+------Angular
+
+
+
