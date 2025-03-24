@@ -6,13 +6,15 @@ JAVA-
 ----java 8
 ----spring boot + Hibernate + jsp
 ----rest api( + custom exception)
-----spring security
+----spring security(basic security + JWT + OAuth2)
 
 Tools-
 -----Terraform
 -----Kafka
 -----maven
 -----GitHub
+-----SDLC-->waterfall
+         -->Agile
 
 cloud-
 -----Linux

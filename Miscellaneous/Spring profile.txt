@@ -1,0 +1,65 @@
+Spring Profiles Overview
+Spring Profiles allow you to define beans, configurations, and properties specific to different environments (e.g., development, testing, production) without changing source code.
+
+Key Concepts
+Purpose: Manage environment-specific configurations in Spring-based applications (e.g., dev, prod, test).
+
+Usage: Profiles help to customize the behavior of an application for different environments.
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+//////////////////////////How Spring Profiles Work/////////////////////
+
+Define Beans for Specific Profiles: Beans can be created for specific profiles using @Profile.
+
+@Profile("dev/prod/test-etc")---->which help us to run code in which environment
+
+//development environment
+@Profile("dev")
+@Bean
+public MyService devService() {
+    return new MyServiceImplDev();
+}
+
+//production environment
+
+@Profile("prod")
+@Bean
+public MyService devService() {
+    return new MyServiceImplDev();
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+/////////in ------->application-dev.properties
+spring.profiles.active=dev ---------> it will above environment i.e. @Profile("dev")
+
+/////////in ------->application-prod.properties
+ spring.profiles.active=prod ---------> it will above environment i.e. @Profile("prod")
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+or you can run multiple environment same time 
+
+spring.profiles.active=dev,test
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+it will create the package accordingly your environment 
+
+mvn package -D spring.profiles.active=dev/prod/test etc
+
+
+
+it will run the specific environment
+
+mvn spring-boot:run -D spring-boot.run.profiles=dev
+
+
+Purpose: This command is used to run your Spring Boot application from a JAR file that has already been built.
+
+java -jar .\rest-api-project1-0.0.1-SNAPSHOT.jar --spring.profiles.active=prod
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+
+

@@ -51,7 +51,7 @@ like : @Email ,@NotNull, @Size it applicable only string ,etc
 @Valid BindingResult result it will validates the all above validations and combines and it will display in postman/swagger   
 
 Rest-Api-code:-> https://github.com/Rahul-ix/Rest_Api
-Rest-Api-Documentation:-> https://documenter.getpostman.com/view/30113311/2sAYkEpKVJ
+POSTMAN Documentation:-> https://documenter.getpostman.com/view/30113311/2sAYkEpKVJ
            --------------------------end rest api--------------------
 
 

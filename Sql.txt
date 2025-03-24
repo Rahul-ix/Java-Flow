@@ -1,0 +1,260 @@
+MYSQL-------->
+
+find the employee name who's salary is 10000?
+select name from Employee where salary=10000;
+
+find employee name is greater than or equal to 10000
+select name from Employee where salary>=10000;
+
+find employee name who's salary is 5000 and 2000
+select name from Employee where salary in(5000,2000)
+
+give me employee id who's name smith and mike
+select id from Employee where name in('smith', 'mike');
+
+------------FOLLOW THIS ORDER: select--->from---->where ----->Group by----->having---->order by---------------
+
+filter the record having command give me employed id who's name is smith
+select id from Employee having name='smith';
+
+sort employee id descending order
+
+select id from Employee  order by id DESC;
+in sql we sorting cmd use order by
+
+
+sort employee name descending order
+select name from Employee order by by name DESC;
+
+sort employee id ascending order
+select id from Employee order by id ASC;
+
+-------built in function in sql-----------
+give me the maximum salary from the table
+
+select max(salary) from Employee;
+
+give me the minimum salary from the table
+select min(salary) from Employee;
+
+give me the average salary from the table
+select avg(salary) from Employee;
+
+give me the average salary from the table
+select sum(salary) from Employee
+
+count the number of employee in table
+select count(id) from Employee
+
+count the number of employee in city wise
+select count(id),name from Employee group by city 
+
+group employee based on city and then count city wise and print the count ascending order
+select count(city) from Employee group by city  order by count(id)
+
+count no of city and group by city and sort the count asc order
+select count(city) from Employee group by city order by city count(id) 
+
+count and group the candidate based on their age
+select count(age) from Employee group by age
+
+group the candidate based on their alary
+select salary from Employee group by salary
+
+group the city after counting  where city name is Bangalore
+select count(city) from Employee group by city having city='Bangalore';
+
+convert all the employee name in upper case
+select Ucase(name) from Employee;
+
+convert all the employee name in lower case
+select Lcase(name) from Employee;
+
+++++++++++++where,in,having,order by id asc/desc,max,min,sum,avg,count,group by,Ucase,Lcase+++++++++++++++++++++
+
+sort the record ascending based on employee id and now i want top 2 records
+
+select limit 2 from user order by id asc
+
+give me only 1st record from the table
+select limit 1 from employee order by asc
+
+give me last 2 record from the table
+select limit from employee order by id desc
+
+i want 1st 3 character from the city
+select mid(city,1,3) from employee;
+
+print current system time now
+select now() from user;
+select now();
+
+now i want time stamp
+select now() As Time; 
+
+alias name 
+select name AS User_Name from user;
+
+wild card
+give the name ends with a
+select name from user where name like "%m";
+
+give me the name of user which consists letter m
+select name from user where name like "%m%";
+
+give me the name of user that start with s
+select name from user where name like "s%";
+
+give me the name of user that consists of 3 letter
+select name from user where name like "_ _ _";
+
+give me the name of user that consists of 5 letter
+select name from user where name like "_ _ _ _ _";
+
+give me the name of user that ends with letter m and consists of 3 letter including m
+select name from user where name like "___m";
+
+delete record from user table where id 6
+delete from user where id=6;
+
+delete record from user table where ids are 6,7
+
+delete from user where id in (6,7);
+
+delete record from user table where name is smith
+delete from user where name =smith;
+
+drop table the user
+drop table user (table is gone)
+
+how do get distinct record from table
+
+print only unique city name
+select  distinct city from  user ;
+
+print only unique salary from user table
+select distinct salary from user
+
+concat name and salary and print output
+select concat(name ,salary) from user;
+
+separate user name and salary with an underscore and then concat
+select concat(name,"_",salary) from user;
+
+remove whitespace from the left side user name and then print name
+select ltrim(name) from user;
+
+remove whitespace from the right side user name and then print name
+select rtrim(name) from user;
+
+remove whitespace from the left side and the right side user name and then print name
+select trim(name) from user;
+
+remove whitespace from the name and salary from both left and right side then concat them separate with underscore
+select concat(trim(name),"_",trim(salary)) from user;
+(or)
+select concat(name,"_",salary),trim(name,salary) from user;
+
+concat name and salry and print output in descending order
+select concat(name,salary) from user order by id desc;
+
+sort user name ascending order
+select name from user order by name asc;
+
+update the record where user name is ram to raj
+update user set name="Raj" where name="ram";
+
+update user name smith to abc where id 5
+update user set name="Raj" where id=5;
+
+update user id  5 to 10
+update user set id=10 where id=5;
+
+replace the city bangalore to Bengaluru
+update user set city="Bengaluru" where city="bangalore";
+
+delete record from the table where you find name raj
+delete from user where name="Raj";
+
+delete record from the table whos salary 10000
+delete from user where salary=10000;
+
+update everyone salary by 500
+update user set salary=salary+500;
+
+decrease everyone salary by 5000
+update user set salary=salary-5000;
+
+add the column to the existing table
+alter table user add email varchar(125);
+
+add the column in the beginning of the table
+alter table user add DOB varchar(125) first;
+
+add the column date after name in user table
+alter table user add date varchar(25) after name;
+
+delete column email from the table
+alter table user drop email;
+
+delete column DOB from the table
+alter table user drop DOB;
+
+find the length each and every user name in the table
+select length(name) from user;
+
+find the length string "Hey i am java developer"
+select length("Hey i am java developer");
+
+----->
+sub-queries
+
+   query(sub-query)
+
+
+second highest salary
+select max(salary) from employee where salary < (select max(salary) from employee)
+
+third highest salary
+select max(salary) from employee where salary < (select max(salary) from employee < (select max(salary) from employee))
+
+inner table
+
+get name who got incentive
+select name from employee where id in (select id from incentive_table);
+---------outer table------------       ------inner table------------
+
+inner most table
+
+get name which females ('F') got incentives
+
+select name from employee where id in (select id from incentive_table where id in(select id from status where gender='F'))
+---------outer table------------       ------------------inner table------------   --------inner most table--------------
+
+
+---data types---
+
+int for id
+varchar name,email etc
+Enum
+birth_date Dat
+gender Enum('F','M')
+
+
+---constrains----
+NOT NULL----name,phone,date_of_birth
+Unique----> phone
+primary key--->id
+foreign key---not duscussed
+Enum--->gender
+set---->store more than one values
+
+ex: 
+
+create table employee (
+id  int primary key,
+name varchar(20) not null,
+gender Enum('F','M'),
+Dob Date  not null,
+phone varchar(10) unique,
+);
