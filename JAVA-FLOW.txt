@@ -15,6 +15,8 @@ Tools-
 -----GitHub
 -----SDLC-->waterfall
          -->Agile
+-----Docker
+
 
 cloud-
 -----Linux
@@ -27,6 +29,9 @@ Database-
 
 frontend-
 ------Angular
+
+Miscellaneous: -spring actuator---Prometheus---Grafana
+               -spring profile
 
 
 

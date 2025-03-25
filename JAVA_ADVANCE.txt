@@ -31,13 +31,13 @@ NOTE: executeUpdate()--->create , update , delete
 -------------ends JDBC---------------------------------------
                  ******
 
-------------WebServlet------------------------------
+------------Web-Servlet------------------------------
 tomcat : tomcat will run servlet, spring boot hibernate ,  api etc
-webserver: it will run Nginx it will run html css frontend technology
+webserver: it will run Nginx it will run html CSS frontend technology
 Dynamic application : which means database and backend contains
 static application : only frontend technology
 
-Servlet : it is a special java class,it can read from html and capable write back to html
+Servlet : it is a special java class, it can read from html and capable write back to html
 
 servlet------>HttpServlet------>GenericServlet
 
@@ -118,9 +118,9 @@ Tags in jsp
 --------------------ends JSP---------------------------------------------------------------------------------------------------
                          ******
 ------------------JSP using MVC---------------------------------------------------------
-MVC----Model(model/sevice-layer), view(html/jsp/angular) ,controller(webservlet)
+MVC----Model(model/service-layer), view(html/jsp/angular) ,controller(webservlet)
 
-view-------------Conctroller-------------------model
+view-------------Controller-------------------model
 
 follow same what we used in webservlet like
 model----create service layer

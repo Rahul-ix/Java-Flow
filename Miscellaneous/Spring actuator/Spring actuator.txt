@@ -1,0 +1,92 @@
+Spring Boot Actuator: Production-ready Features
+
+Spring Boot includes a number of additional features to help you monitor and manage your application when you push it to production
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+*****Enabling Production-ready Features******
+
+   <dependency>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+
+by adding just above dependencies you will get 1 endpoint i.e. /actuator
+
+http://localhost:8081/actuator
+
+you will get like below:
+
+{
+  "_links": {
+    "self": {
+      "href": "http://localhost:8081/actuator",
+      "templated": false
+    },
+    "health": {
+      "href": "http://localhost:8081/actuator/health",
+      "templated": false
+    },
+    "health-path": {
+      "href": "http://localhost:8081/actuator/health/{*path}",
+      "templated": true
+    }
+  }
+}
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+See above we getting only 1 endpoints but you can also add more endpoints like in application.properties/yaml
+
+management.endpoints.web.exposure.include=health,info,metrics---->expose endpoints health,info,metrics
+management.endpoints.web.exposure.exclude=beans,heapdump--------->hides(exclude) beans,heapdum
+management.endpoints.web.exposure.include=* ---------------------> if you add star it will expose all endpoints
+
+
+at the end hit : localhost:8081/actuator ---> you will get json which contains all endpoints based on application.properties/yaml configuration
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Prometheus: you can now visually view  UI instead of JSON 
+
+-to use Prometheus add below dependencies
+
+                <dependency>
+			<groupId>io.micrometer</groupId>
+			<artifactId>micrometer-registry-prometheus</artifactId>
+		</dependency>
+
+-we added spring actuator and Prometheus dependencies
+
+-download Prometeus
+https://prometheus.io/download/
+
+-after downloading and extracting go to below path
+D:\Monitor\prometheus-3.2.1.windows-amd64>
+
+-paste command to run prometheus.exe
+ prometheus.exe --config.file=prometheus.yml
+
+-Now run : http://localhost:9090
+
+DONE NOW YOU WILL SEE DASHBOARD OF PROMETHEUS
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Grafana: Improved UI and better than Prometheus
+
+-download Grafana 
+https://grafana.com/grafana/download?platform=windows
+
+note: no need dependencies we already added Spring actuator and Prometheus
+
+-after downloading go to bin path
+D:\Monitor\grafana-v11.5.2\bin>
+
+-paste command to run grafana-server.exe
+.\grafana-server.exe
+
+-Now run : http://localhost:3000
+
+note at first time it will ask username and password i.e. name=admin and password = admin
+
+DONE:- You can create dashboard your own or add existing JSON
+
+
+

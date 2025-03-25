@@ -1,0 +1,123 @@
+### Terraform Information
+
+#### Terraform Overview
+- It is IAAC (Infrastructure As A Code)
+- We use HCL as language
+- Works with most cloud platforms like AWS, GCP, Azure, etc.
+- Install Terraform
+- Install VS Code
+
+#### Create an EC2 Instance
+##### Step 1: provider.tf
+provider "aws" {
+    region = "ap-south-1"
+    access_key = ""
+    secret_key = ""
+}
+
+##### Step 2: main.tf
+resource "aws_instance" "vm_1" {
+    ami = "ami-id"
+    instance_type = "t2.micro"
+    key_name = "devopssession"
+    security_groups = ["default"]
+    tags = {
+        Name = "LinuxVM"
+    }
+}
+
+#### Terraform Commands
+- terraform init -> Downloads the required provider plugins.
+- terraform validate -> Checks the configuration files for syntax and logical errors.
+- terraform fmt -> Formats the Terraform configuration files.
+- terraform plan -> Creates an execution plan to show what changes Terraform will make.
+- terraform apply -> Applies the planned changes to create/update resources.
+- terraform destroy -> Destroys all resources managed by Terraform.
+
+#### Terraform Variables
+##### variables.tf (Input Variables)
+variable "instance_type" {
+  description = "EC2 instance type"
+  type        = string
+  default     = "t2.micro"
+}
+
+variable "ami_id" {
+  description = "AMI ID for the EC2 instance"
+  type        = string
+  default     = "ami-0c55b159cbfafe1f0"
+}
+
+##### main.tf (Using Input Variables)
+resource "aws_instance" "example" {
+  ami           = var.ami_id
+  instance_type = var.instance_type
+}
+
+##### outputs.tf (Output Variable)
+output "instance_id" {
+  description = "The ID of the created EC2 instance"
+  value       = aws_instance.example.id
+}
+
+##### Usage
+1. Run Terraform apply with the default values:
+   terraform apply
+2. Override the input variables:
+   terraform apply -var="instance_type=t3.medium" -var="ami_id=ami-12345678"
+3. Get the output value:
+   terraform output instance_id
+
+##### Where Do We Use Input & Output Variables?
+✅ Input Variables -> Make Terraform configurations flexible and reusable.
+✅ Output Variables -> Provide useful information after Terraform runs.
+
+---
+
+### Modules In Terraform (Project)
+Modules in Terraform will help developers organize the code for easy maintainability of projects.
+
+#### Step-1: Create Project Directory
+Ex: tcs
+
+#### Step-2: Create "modules" Directory Inside Project Directory
+Ex: tcs
+       - modules
+
+#### Step-3: Create "ec2" and "s3" Directories Inside (modules) Directory
+Ex: tcs
+    - modules
+        - ec2
+        - s3
+
+#### Step-4: Create Terraform Scripts Inside "ec2" Directory
+inputs.tf
+main.tf
+outputs.tf
+
+#### Step-5: Create Terraform Scripts Inside "s3" Directory
+inputs.tf
+main.tf
+outputs.tf
+
+#### Step-6: Create "provider.tf" File in Root Module (tcs)
+
+#### Step-7: Create "main.tf" File in Root Module and Invoke Child Modules
+module "my_ec2" {
+    source = "./modules/ec2"
+}
+
+module "my_s3" {
+    source = "./modules/s3"
+}
+
+#### Step-8: Create "outputs.tf" in Project Root Module and Access Child Module Outputs
+output "test_vm_public_ip" {
+    value = module.my_ec2.a1
+}
+
+output "test_vm_private_ip" {
+    value = module.my_ec2.a2
+}
+
+**Note:** `a1` and `a2` are output variables declared in the `ec2` module's `outputs.tf` file.
