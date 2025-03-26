@@ -1,0 +1,74 @@
+------------------------------Maven--------------------------------------------------------------------------------------------------------------------------------------------------------
+How to set up maven in local system ?
+
+Step 1:  Download and install Required version of JDK
+
+Step 2:  Setup JAVA_HOME(Excluding bin folder) and Java Path (Including bin folder path)
+	
+	JAVA_HOME=C:\Program Files\Java\jdk-17
+	path=C:\Program Files\Java\jdk-17\bin
+
+Step 4:  Download Maven and unzip the files
+
+4) Setup MAVEN_HOME(Excluding bin folder) and Maven Path (Including bin folder path)
+
+	MAVEN_HOME = C:\apache-maven-3.9.9
+	path=C:\apache-maven-3.9.9\bin
+	
+5)  Verify Maven setup by using following command in command prompt	
+
+	  $ mvn -version
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Maven?: It is open source tool which help us todo manage and build project
+maven archetype / archetype: it will create project structure automatically
+artific id: unique id like cgi
+name: give unique name like cgi
+group: opposite direction like com.cgi
+
+maven dependencies: it will help us to add dependencies in pom.xml file
+
+maven goal:- mvn clean ---> removes .class files from the target folder
+           - mvn test ----> runs junit test cases
+           - mvn compile--> it will regenerate/add .class file in target folder
+           - mvn package--> it will generate .jar file (package is consists test also)
+
+
+or you can do directly like this
+mvn clean compile package
+
+starter tag:
+It is like contains all the necessary dependencies in starter tag
+ex: spring-data-jpa-it is contains all dependencies like hibernate, logger etc 
+
+
+Dependencies exclusion: it is mechanism  that allows you to remove unwanted transitive dependencies, these transitive dependencies added in your project automatically
+but sometime you no need these transitive dependencies because of application performance issue
+
+ex: spring-context : this dependency has consists more transitive dependencies added automatically
+
+how to remove transitive dependencies? 
+
+----Without exclusion------
+
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context</artifactId>
+    <version>6.2.0</version>
+</dependency>
+
+
+----With exclusion------
+
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-context</artifactId>
+    <version>6.2.0</version>
+    <exclusions>
+        <exclusion>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+        </exclusion>
+    </exclusions>
+</dependency>

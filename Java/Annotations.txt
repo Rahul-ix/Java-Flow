@@ -1,0 +1,259 @@
+Annotations
+
+-------------------------------------------------------------------Spring boot annotations--------------------------------------------------------------------------------------------------
+
+@SpringBootApplication
+Combines @Configuration, @EnableAutoConfiguration, and @ComponentScan
+
+@Component whole class is behaviors' like bean
+
+@Service we write here business logic
+
+@Repository we write here database logic
+
+@Configuration we use this to execute code when spring boot  application starts
+
+@Bean we declare this on method level annotation and @component is like class level annotation
+
+@Autowired we use this to DI spring boot creating object or constructor
+
+@Qualifier("beanName") – Resolving Ambiguity in Dependency Injection
+When multiple beans of the same type exist, Spring doesn’t know which one to inject.
+👉 @Qualifier helps by specifying the exact bean name to use
+
+@Primary is used to set a default bean when multiple beans of the same type exist
+
+@Value("${property.name}")
+Injects a value from the application.properties or application.yml
+
+@Lazy
+Creates a bean lazily, i.e., only when required
+
+@RestController
+Combines @Controller and @ResponseBody.
+
+Marks a class as a REST API controller.
+
+@Controller
+Marks a class as a Spring MVC controller.
+
+@RequestMapping("/path")
+Maps HTTP requests to handler methods.
+
+@GetMapping("/path")
+Maps HTTP GET requests.
+
+@PostMapping("/path")
+Maps HTTP POST requests.
+
+@PutMapping("/path")
+Maps HTTP PUT requests.
+
+@DeleteMapping("/path")
+Maps HTTP DELETE requests.
+
+@RequestParam ex id?=100 it is like query parameter
+
+@PathVariable it means we use like after slash / id
+
+@RequestBody we use to combine/convert  json to java object
+
+@ResponseBody it will return in JSON in postman
+
+@CrossOrigin(origins = "http://example.com")  // 👈 Only allows requests from example.com
+it will only particular starts from
+
+@CrossOrigin only controls which frontend origins are allowed
+
+@ExceptionHandler(Exception.class) is used inside a @ControllerAdvice class to handle exceptions globally across all controllers
+
+@ControllerAdvice
+Global exception handling across multiple controllers
+
+@ResponseStatus(HttpStatus.NOT_FOUND)
+Defines the HTTP status returned for a specific exception.
+
+@ResponseEntity --> it contains header , body status
+
+
+
+----------------------------------------------------------------Hibernate boot annotations--------------------------------------------------------------------------------------------------
+
+---
+
+## 1. Entity and Table Mapping  
+- `@Entity` → Marks a class as a Hibernate entity (table).  
+- `@Table(name = "table_name")` → Specifies table name.  
+
+```java
+@Entity
+@Table(name = "employees")
+public class Employee { }
+```
+
+---
+
+## 2. Primary Key and ID Generation  
+- `@Id` → Marks a field as the primary key.  
+- `@GeneratedValue(strategy = GenerationType.IDENTITY)` → Specifies ID generation strategy.  
+- `@SequenceGenerator(name = "seq_name", sequenceName = "db_seq")` → Defines a custom sequence.  
+- `@TableGenerator(name = "table_gen", table = "id_table")` → Uses a table for ID generation.  
+
+```java
+@Id
+@GeneratedValue(strategy = GenerationType.IDENTITY)
+private Long id;
+```
+
+---
+
+## 3. Column Mapping  
+- `@Column(name = "column_name", length = 100, nullable = false, unique = true)` → Defines column properties.  
+- `@Lob` → Maps large objects (BLOB, CLOB).  
+- `@Transient` → Ignores a field (not stored in the database).  
+
+```java
+@Column(name = "name", length = 100, nullable = false, unique = true)
+private String name;
+
+@Transient
+private int age; // Not stored in DB
+```
+
+---
+
+## 4. Relationship Mapping  
+
+### One-to-One  
+- `@OneToOne` → Defines a one-to-one relationship.  
+- `@JoinColumn(name = "column_name")` → Specifies the foreign key column.  
+
+```java
+@OneToOne
+@JoinColumn(name = "passport_id")
+private Passport passport;
+```
+
+---
+
+### One-to-Many  
+- `@OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)` → Defines a one-to-many relationship.  
+
+```java
+@OneToMany(mappedBy = "department", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+private List<Employee> employees;
+```
+
+---
+
+### Many-to-One  
+- `@ManyToOne` → Defines a many-to-one relationship.  
+- `@JoinColumn(name = "department_id")` → Foreign key reference.  
+
+```java
+@ManyToOne
+@JoinColumn(name = "department_id")
+private Department department;
+```
+
+---
+
+### Many-to-Many  
+- `@ManyToMany` → Defines a many-to-many relationship.  
+- `@JoinTable(name = "table_name", joinColumns = @JoinColumn(name = "col1"), inverseJoinColumns = @JoinColumn(name = "col2"))` → Defines the join table.  
+
+```java
+@ManyToMany
+@JoinTable(name = "employee_project",
+    joinColumns = @JoinColumn(name = "employee_id"),
+    inverseJoinColumns = @JoinColumn(name = "project_id"))
+private List<Project> projects;
+```
+
+---
+
+## 5. Fetch Types  
+- `FetchType.LAZY` → Loads data only when accessed.  
+- `FetchType.EAGER` → Loads data immediately.  
+
+```java
+@OneToMany(fetch = FetchType.LAZY)
+private List<Employee> employees;
+```
+
+---
+
+## 6. Cascade Types  
+- `CascadeType.ALL` → Applies all cascading operations.  
+- `CascadeType.PERSIST` → Saves child objects when parent is saved.  
+- `CascadeType.MERGE` → Merges changes automatically.  
+- `CascadeType.REMOVE` → Deletes child entities when parent is deleted.  
+- `CascadeType.REFRESH` → Reloads the entity from the database.  
+- `CascadeType.DETACH` → Removes an entity from persistence context.  
+
+```java
+@OneToMany(cascade = CascadeType.ALL)
+private List<Employee> employees;
+```
+
+---
+
+## 7. Inheritance Mapping  
+- `@Inheritance(strategy = InheritanceType.SINGLE_TABLE)` → Defines inheritance strategy.  
+  - `SINGLE_TABLE` → Uses one table for all subclasses.  
+  - `TABLE_PER_CLASS` → Creates separate tables per class.  
+  - `JOINED` → Creates joined tables.  
+- `@DiscriminatorColumn(name = "type")` → Differentiates subclass types.  
+- `@DiscriminatorValue("value")` → Assigns a type value.  
+
+```java
+@Entity
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "employee_type")
+public class Employee { }
+```
+
+---
+
+## 8. Lifecycle Hooks (Entity Callbacks)  
+- `@PrePersist`, `@PostPersist`, `@PreUpdate`, `@PostUpdate`, `@PreRemove`, `@PostRemove`
+
+```java
+@PrePersist
+public void prePersist() {
+    createdAt = new Date();
+}
+```
+
+---
+
+## 9. Hibernate-Specific Annotations  
+- `@Formula("salary * 12")` → Defines a computed column.  
+- `@NaturalId` → Marks a field as a unique business key.  
+- `@Immutable` → Marks an entity as read-only.  
+- `@DynamicInsert` → Excludes `null` fields in insert statements.  
+- `@DynamicUpdate` → Updates only modified fields.  
+
+```java
+@Formula("salary * 12")
+private double annualSalary;
+```
+
+---
+
+## 10. Caching Annotations  
+- `@Cacheable` → Enables caching for an entity.  
+- `@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)` → Defines caching strategy.  
+
+```java
+@Entity
+@Cacheable
+@Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
+public class Product { }
+```
+
+---
+
+### Conclusion  
+This list contains all essential Hibernate annotations used in Spring Boot JPA.
+

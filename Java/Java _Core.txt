@@ -1,0 +1,222 @@
+JAVA CORE TOPIC CHEAT SHEET
+static                         no need create object
+
+non static                     compulsory create object
+
+STACK,HEAP,GC                  STACK-holds address , HEAP-creates object and GC-remove object-
+                               -from HEAP which address is not present in STACK
+                               
+types of variable              local,static,non-static,refference variable
+
+data types                     primitive int ,float,string etc || non -primitive -string etc
+
+method                         void method and int float string method
+
+return/return value            return for void and return value for other than void method
+
+unreachable code               after return keyword
+
+constructor                    same name as class name,by default void
+
+constructor overloading        same name but different args
+
+this                           it special refference variable holds current address
+this.nonStaticMember           you cannot use yhis keyword inside static method
+this()                         when calling con's it must be first statement
+this                           this keyword used in parent class
+con's chaining                 call one con's through another con's by using this()
+
+compiler                       java code (.java)-----compiler-------> byte code(.class file) 
+JRE                            byte code(.class)-----JRE------------> Signals and next output
+
+inheritance                    inheriting the member of parent class to child class so that we can reuse those features
+
+multilevel inheritance         more than one class inheriting means A --> B --->C
+
+multiple inheritance is note possible in the class due to diamond problem (ambiguity)
+child class inheriting 2 class and that 2 inheriting one parent class but you can use multiple inheritance in interface
+packages : it is nothing but folders so that we can arrange code in systematically it is present in java folder
+ex: import p1.A
+
+access specifier on variable and method
+private same class
+default same class same package sub or non sub class
+protected same class same package different package only subclass
+public anywhere in package or project
+
+access specifier on class
+private and protected not applicable for class
+public you can use anywhere in package and if default you can use a same package
+
+access specifier on constructor
+private if constructor is private then you can not inherit that class and you cannot create object outside
+default when we make constructor default then we can create object in same package but you cannot create object -
+-and inherit outside package
+protected : you can use same class same package and for inheriting and object creation you can inherit different packages also-
+-only if it is subclass or extends and if it is a subclass i can create object also
+
+polymorphism : we are develop features such that it can take 2 forms
+you can use polymorphism on only methods
+
+overriding (runtime error) : inheriting parent class method in child class but altering the logic in child class
+@Override : checks whether method is override or not
+note child class  method access specifier should be higher or same compared to parent class method
+
+public Class A{
+void test1(){
+sop("checking");
+}
+}
+public class B extends A {
+
+@Override
+public void tset1(){
+sop("checked")}
+psvm(){
+B b  = new B();
+b.test1();//checked altered logic here
+}}
+
+overloading (compile time error): same name but different in arguments
+public Class A{
+
+void test1(){
+sop("test1"):}
+void test1(int x){
+sop("tset"+x);}
+psvm(){
+A a = new A();
+a.test1();//test1
+a.test1(2);//test2
+}}
+
+Exception : Exception is occurred when user give bad inputs then execution stops
+we handle exception by using try -catch block
+*in try block exception occurs that time jvm will create exception object and send to catch block-
+then catch block surpass error
+*exception is parent class  exception
+*it has 2 types of exception 
+                   Throwable
+                       |
+                      Exception
+                      /          \
+ Compile Exception(unchecked)   Runtime exception(unchecked exception)  
+ IO Exception					ArraysOutOfbound exception
+ File not found exception                       NullPointerException 
+ sql exception etc			        NumberFormatException  
+ 
+datatype casting : converting perticular data type to required data type
+Auto upcasting (narrowing) : converting smaller data size to bigger data size
+explicitly down-casting (broadening) : converting bigger data size to samaller data size
+
+wrapper class : wrapping values and storing in wrapper class objects
+auto-boxing : wrapping primitive values and storing in wrapper class object
+String x="1234"; Integer y=Integer.parseInt(x);
+(unboxing): sop(y); reading 
+
+Scanner---->: it is a inbuilt class , you cannot change its syntax
+.next()--->only one can enter
+.nextLine()---> more than one word can enter
+Scanner scan = new Scanner(System.in);
+
+post increment-->increment second time x++
+post decrement-->decrement second time x--
+pre increment -->increment 1st time    ++x
+pre decrement--->decrement 2nd time     --x
+
+Arrays : it stores collection of values
+it stores values in continuous address
+it starts with index zero
+adding and removing is time consuming
+it take default values if you don't add values on it
+int x[] = new int [3];//3 indicates size of array
+x[0]=10; x[1]=20; x[2]=30;
+for(int val : x){
+sop(val);}
+
+File Handling: (write in try-catch block)
+File : File is a class
+[ .exists() it will check file exist or not if exists print true, .delete() id deleted prints true, mkdir make directory
+note : createFile()---- gives exception write in try-catch block and .length()---length of character in file
+.list()---checks how many files and folders consits in given  path
+FileReader--->read charecter by charector need to use for loop
+FileWriter-->it write in same line
+BufferedWriter----> it is improved way of writing, it has method .newLine() move next line
+BufferedReader-----> it is improved way of reading .readLine() read entire line no need to use for loop
+
+Serialization and Deserialization
+
+EX:
+A a1 = new A();
+  |
+ \_/				permanent file
+ +---------+        +---------+                    +---------+
+|         | 0's 1's |         |			   |         |
+|         | ----->  |         | ------->           |         |
+|         | serialization     |                    |         |
+|         |         |         |                    |         |
++---------+         +---------+                    +---------+
+ 					file.ser                         De-serialization                 
+ 	
+serialization: convert object to 0's and 1's and store in permanent file.ser
+De-serialization: read 0's and 1's from object back
+transient: if you use transient keyword in variable it means- 
+-it will skip the writing content in to object during serialization
+
+finally: it is extension of try-catch block
+		anything we write in finally block will execute 100%
+		(I)-you can forcefully stop finally block System.exit(0);
+		(I)- we can remove catch block also
+		exception error comes when we write outside finally block
+		(I) multiple catch block writing is possible but 1st write child exception(NullponterException) and -
+		-then parent exception(Exception)
+Custom Exception: you can create you own custom exception (age is not valid, fund is not suppisent)-
+-to use custom exception you need to use --->throw new methodName();
+Encapsulation: here we wrap the private variable to the method 
+			   we make variable private so that direct access of variable is avoided
+			   we use setter and getter to access variables through method
+interface: it consist only incomplete(after 8 you can create complete method by using default and static keyword)
+		   it is act like contract to those class which one is inherited
+		   every variable in interface by default final static
+		   we cannot create incomplete static method in interface
+
+extra point note: static members are not able to inherited(means indirectly it is using parent class properties)
+class to class : extends
+class to interface : implements
+interface to interface: extends
+interface to class: error
+
+
+
+abstract-> we used abstract keyword in class
+           it has complete and incomplete both method
+           you can create static/non-static variable
+           you cannot do multiple inheritance
+           you can create constructor in abstract
+
+IIB(Instance Initialization Block)
+it is executed when we create object
+how many number of time we create object that many time IIB are called
+IIB are used for initialize all variables at one place
+IIB follows sequence order
+we can initialize both static/non-static variable in IIB
+
+SIB(static initialize block):It runs before main method
+we did not create object of calling SIB
+SIB runs only once
+it also runs in sequence
+
+IIB VS SIB
+IIB -it runs static and non-static both variables
+SIB-it runs static and non-static both variables
+
+
+super keyword: it is used only when inheritance is happened
+you cannot use super keyword inside parent class you can use only inside child class
+using super keyword we can access parent class members
+using super keyword we can access static/non-static members
+you cannot use super keyword inside static method
+using super keyword inside child class con's we can call parent class constructor and it should be first statement
+you cannot use both at a time in this() and super() keyword to call constructor
+
+-------end-----------------------------------------
