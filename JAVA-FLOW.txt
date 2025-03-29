@@ -7,7 +7,7 @@ JAVA-
 ----spring boot + Hibernate + jsp
 ----rest api( + custom exception)
 ----spring security(basic security + JWT + OAuth2)
-----Multiplethread
+----Multiple thread
 
 Tools-
 -----Terraform

@@ -1,0 +1,113 @@
+Key Benefits of Docker
+✅ Portable → Runs anywhere without setup issues.
+✅ Lightweight → Uses fewer resources than virtual machines.
+✅ Fast Deployment → Start an app instantly in any environment.
+✅ Easy Scaling → Run multiple instances effortlessly.
+
+------------------------------------------------
+| AWS EC2 Instance (Virtual Machine)          |
+| ------------------------------------------- |
+| | Linux OS (Ubuntu, Amazon Linux, etc.)  | |  <-- 🟢 OS layer to run Docker.
+| |-----------------------------------------| |
+| | Docker Engine (Bridge)                  | |  <-- 🟢 Manages containers.
+| |-----------------------------------------| |
+| | Container 1 (Spring Boot App + JDK)     | |  <-- 🟢 Runs the Java app.
+| | Container 2 (Database - MySQL/Postgres) | |  <-- 🟢 Stores application data.
+| | Container 3 (Redis, Other Services)     | |  <-- 🟢 Caching & microservices.
+| ------------------------------------------- |
+------------------------------------------------
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Installing Docker:
+_________________________
+
+For Amazon Linux use the following commands
+
+Install Docker In Amazon Linux VM
+____________________________
+sudo yum update -y 
+sudo yum install docker -y
+sudo service docker start
+sudo usermod -aG docker ec2-user
+exit
+
+Use this command to check version of docker installed
+_____________________________________________________
+docker -v
+
+
+For practise pull the sample image from docker hub repository of pankaj sir academy: docker pull psait/pankajsiracademy:latest
+
+For Practise pull docker official image: docker pull hello-world
+
+Important Docker Commands
+_______________________________________________________
+docker pull : download docker image from hub
+
+	docker pull [image-name]
+	
+docker run : run docker image - this will create container (Isolated Enviroment to run docker image- This is not a OSs)
+
+	docker run [image-name / image-id]
+
+docker ps :To display docker containers that are running 
+
+	docker ps 
+	
+display stopped containers:
+
+	docker ps -a 
+	
+docker stop :To Stop docker container 
+
+	docker stop [container-id]
+	
+docker start : Start docker container 
+
+	docker start [container-id]
+
+docker rm : will remove stopped docker container 
+
+	docker rm [contianer-id]
+
+docker rmi : Will Remove docker image 
+
+	docker rmi [image-name / image-id]
+	
+
+To remove all stopped containers and un-used docker images we can use below command 
+
+		docker system prune -a
+
+
+How to create Docker Image and run that to access from browser?
+________________________________________________________________
+
+run Docker Image from docker hub using the command
+
+Docker run [image-name] - This command when executed we will not be able to access our container in browser because it requires port mapping.
+
+As Container is running inside linux VM. We will have to map linux vm (host port) to container(Container port) this is called as port mapping. To do this perform the following
+
+Docker run -p host-port:container-port [image-name]
+
+Example: docker run -p 9090:9090 [image-name]
+
+Example: docker run -d -p 9090:9090 [image-name] will run the container in background
+
+Now you can access our application using the url http://public-ip:host-post(linux-vm)
+
+Note
+1. Enable Inbound rule in security group custom ip IPv4 anywhere with host port number.
+2. If you run Multiple Containers in same linux vm then host port number should be different for every container
+____________________________________________________________________________________
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Install jekins using docker image name - docker run -d -p 8080:8080 jenkins/jenkins
+Note Enable Inbound rule in security group custom ip 8080 IPv4 anywhere
+
+If you are not using docker to install and configure to-do Jenkins, then you have to do WHAT THE HELL STEPS?
+
+

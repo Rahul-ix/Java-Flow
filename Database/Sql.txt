@@ -245,16 +245,80 @@ gender Enum('F','M')
 NOT NULL----name,phone,date_of_birth
 Unique----> phone
 primary key--->id
-foreign key---not duscussed
+foreign key---it is used build relation between 2 tables and it consist repetitive values
 Enum--->gender
 set---->store more than one values
 
 ex: 
 
-create table employee (
-id  int primary key,
-name varchar(20) not null,
-gender Enum('F','M'),
-Dob Date  not null,
-phone varchar(10) unique,
+foreign key-----------
+
+//Main table
+
+use db;
+create table Student(
+id int primary key,
+name varchar(20) NOT NULL,
+gender enum('F','M'),
+certificate set('J2ee','Devops','Spring boot')
 );
+
+insert into student values(103,'Ruhi','F','Spring boot');
+
+select * from student;
+
+//attendance
+
+create table attendance (
+empid int,
+attendance_date Date,
+class int
+)
+
+//sub-table
+create table attendance (
+id int,
+attendance_date Date,
+class int
+);
+
+select * from attendance;
+
+insert into attendance values (1,'2025-3-20',1);
+
+select name from student where id IN (select id from attendance);
+
+
+
+------------------------------------------------------------
+subtract 2 table  and give me output?
+
+using above table
+//IN --->will give matching record
+//NOT--->IN will give non matching record
+select id from student where id NOT IN (select id from attendance);
+
+----------------------------------------------------------------------
+
+joins ------> which will give combination of 2 or more tables and displaying table
+
+     t1           t2
+ex: A B C         ADEF    
+
+i want A E table then we will use joins
+
+
+inner join-------
+display name from student table and attendance from attendance table
+
+select   student.name,  attendance.attendance_date from  student    inner join  attendance on  student.id=attendance.id
+       --student table--  ----attendance table----      -main table--                          --main table id = sub table id--      
+
+
+left join-------- 9 video
+
+
+
+
+
+

@@ -1,0 +1,176 @@
+----------PRODUCER----------------------------------------------------------------------
+
+
+Add below dependencies
+                <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+
+->              <dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka-streams</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+NOTE:: Add simple spring web dependencies
+
+
+step 1: create constants
+------------------------------------------------------------------------------------------
+public class AppConstants{
+
+public static final String TOPIC ="order_topic";
+public static final String KAFKA_HOST="localhost:9092";
+
+}
+-------------------------------------------------------------------------------------------------
+step 2:
+--------------------------------------------------------------------------------------------------
+package com.customer_app.entity;
+
+public class Order {
+
+    private String id;
+    private String name;
+    private Double price;
+    private String email;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Order [id=" + id + ", name=" + name + ", price=" + price + ", email=" + email + "]";
+    }
+
+
+
+}
+
+----------------------------------------------------------------------------------------------------
+
+step 3: create configuration class "KafkaProduceConfiguration" 
+-----------------------------------------------------------------------------------------------------
+
+@Configuration
+public class KafkaProduceConfiguration{
+
+@Bean
+public ProducerFactory<String,Order> producerFactory(){
+
+Map<String, Order> k=new HashMap<>();
+
+        K.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, AppConstants.KAFKA_HOST);
+        K.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
+        K.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, JsonSerializer.class);
+
+ return new DefaultKafkaProducerFactory<>(k);
+
+}
+
+  @Bean
+    public KafkaTemplate<String, Order> kafkaTemplate() {
+        return new KafkaTemplate<>(producerFactory());
+    }
+----------------------------------------------------------------------------------------------------
+step 4: create service 
+----------------------------------------------------------------------------------------------------
+
+package com.customer_app.service;
+
+import com.customer_app.constant.AppConstants;
+import com.customer_app.entity.Order;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.stereotype.Service;
+
+
+@Service
+public class OrderService {
+
+    @Autowired
+    private KafkaTemplate<String, Order> kafkaTemplate;
+
+    public String addMsg(Order order) {
+
+        // sends msg to kafka topic
+        kafkaTemplate.send(AppConstants.TOPIC,order.getId(), order);
+
+        return "Msg Published To Kafka Topic";
+    }
+}
+
+----------------------------------------------------------------------------------------------------
+step 5: create controller
+----------------------------------------------------------------------------------------------------
+
+package com.customer_app.controller;
+
+import com.customer_app.entity.Order;
+import com.customer_app.service.OrderService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/v1/order")
+public class OrderRestController {
+
+    @Autowired
+    private OrderService service;
+
+    @PostMapping("/create")
+    public String createOrder(@RequestBody Order order) {
+        String response = service.addMsg(order);
+        return response;
+    }
+
+}
+
+----------------------------------------------------------------------------------------------------
+-----------------------PRODUCER ENDED
+----------------------------------------------------------------------------------------------------
+
