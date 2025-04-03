@@ -308,17 +308,34 @@ ex: A B C         ADEF
 i want A E table then we will use joins
 
 
-inner join-------
+INNER JOIN-------
 display name from student table and attendance from attendance table
 
 select   student.name,  attendance.attendance_date from  student    inner join  attendance on  student.id=attendance.id
        --student table--  ----attendance table----      -main table--                          --main table id = sub table id--      
 
 
-left join-------- 9 video
+LEFT JOIN ------- is used to retrieve all records from the left table and the matching records from the right table. If there is no match in the right table, NULL values are returned for the right table’s columns.
+
+select student.name ,student.gender , attendance.class from student left join attendance ON student.id=attendance.id
 
 
+RIGHT JOIN ------- retrieves all records from the right table and the matching records from the left table. If there is no match in the left table, NULL values are returned for the left table’s columns.
 
+select student.name ,student.gender , attendance.class from student right join attendance ON student.id=attendance.id
 
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Difference Between INNER JOIN, LEFT JOIN, and RIGHT JOIN in MySQL
+1. INNER JOIN
+✅ Returns only matching records from both tables.
+❌ If there is no match, the row is excluded.
+
+2. LEFT JOIN (LEFT OUTER JOIN)
+✅ Returns all records from the left table and matching records from the right table.
+❌ If no match is found, NULL values are returned from the right table.
+
+3. RIGHT JOIN (RIGHT OUTER JOIN)
+✅ Returns all records from the right table and matching records from the left table.
+❌ If no match is found, NULL values are returned from the left table.
 
 

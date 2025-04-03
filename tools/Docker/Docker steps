@@ -105,9 +105,66 @@ ________________________________________________________________________________
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-Install jekins using docker image name - docker run -d -p 8080:8080 jenkins/jenkins
-Note Enable Inbound rule in security group custom ip 8080 IPv4 anywhere
+OVERALL RUN From Spring boot --->github---->EC2
 
-If you are not using docker to install and configure to-do Jenkins, then you have to do WHAT THE HELL STEPS?
+-> Spring Boot: framework which is used to develop enterprise based applications.
+-> Spring Boot applications will be packaged as a jar file for deployment. 
+-> To run the jar file we will use command :  java -jar <file-name.jar>
+-> To run springboot application jar file we will use tomcat server as "embedded server".
+-> By default spring boot application will run on port number 8080
+
+Step 1: Create Docker File
+
+FROM openjdk:17
+
+COPY target/demo-app.jar  /usr/app/
+
+WORKDIR /usr/app/
+
+EXPOSE 8080
+
+ENTRYPOINT ["java", "-jar", "demo-app.jar"]
+
+
+Step 2: Note (Install maven and git in linux VM first)
+
+1) Clone git repo in docker host machine (linux): git clone <http-url>
+
+2) Point to project root folder: cd <app-name> and run to generate jar: mvn clean package
+
+3) Create docker image and check that: 
+-> docker build -t psait/pankajsiracademy:<tag> .
+(
+Here 
+-> psait is username
+-> repositoryname of docker hub
+-> <tag> can
+  a. prod-v1 or prod-v2v2 for production
+  b. dev-v1 for development environment
+  c. test-v1 for testing environment
+  d. staging-v1 for staging environment
+)
+-> docker images 
+
+4) run docker container: docker run -d -p 8080:8080 --name psa psait/your-app
+
+5)See the image is running or not: docker ps
+
+6) docker logs <container-id>
+
+5) Access application URL in browser: http://public-ip:8080/
+
+
+Steps to push docker image to docker hub
+__________________________________________
+
+-> login into docker hub account from bash
+
+docker login
+Enter username: psait
+Enter password
+
+-> push docker image
+docker push psait/pankajsiracademy:<tag>
 
 
