@@ -1,0 +1,150 @@
+-----------------------------------------------------------------------Consumer--------------------------------------------------------------------------------------------------
+Add below dependencies
+
+                <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+
+->              <dependency>
+			<groupId>org.apache.kafka</groupId>
+			<artifactId>kafka-streams</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.kafka</groupId>
+			<artifactId>spring-kafka-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+NOTE:: Add simple spring web dependencies
+
+
+step 1: create constants
+------------------------------------------------------------------------------------------
+
+public class AppConstants {
+
+    public static final String TOPIC = "order_topic";
+    public static final String KAFKA_HOST = "localhost:9092";
+
+}
+------------------------------------------------------------------------------------------
+
+
+-------------------------------------------------------------------------------------------------
+step 2: create entity
+--------------------------------------------------------------------------------------------------
+
+public class Order {
+
+    private String id;
+    private String name;
+    private Double price;
+    private String email;
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public Double getPrice() {
+        return price;
+    }
+
+    public void setPrice(Double price) {
+        this.price = price;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    @Override
+    public String toString() {
+        return "Order [id=" + id + ", name=" + name + ", price=" + price + ", email=" + email + "]";
+    }
+
+
+
+}
+
+
+----------------------------------------------------------------------------------------------------
+
+step 3: create configuration class "KafkaProduceConfiguration" 
+-----------------------------------------------------------------------------------------------------
+
+
+@Configuration
+public class KafkaConsumerConfig {
+
+    @Bean
+    public ConsumerFactory<String, Order> consumerFactory() {
+
+        Map<String, Object> kafkaConfigProps = new HashMap<String, Object>();
+
+        kafkaConfigProps .put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, AppConstants.KAFKA_HOST);
+        kafkaConfigProps .put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
+        kafkaConfigProps .put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+
+        return new DefaultKafkaConsumerFactory<>(kafkaConfigProps, new StringDeserializer(), new JsonDeserializer<>());
+
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, Order> kafkaListnerFactory() {
+
+        ConcurrentKafkaListenerContainerFactory<String, Order> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+
+        factory.setConsumerFactory(consumerFactory());
+
+        return factory;
+    }
+
+}
+
+
+----------------------------------------------------------------------------------------------------
+
+step 3:in main class add below code 
+-----------------------------------------------------------------------------------------------------
+
+@SpringBootApplication
+public class CustomerAppApplication {
+//CONSUMER
+	public static void main(String[] args) {
+		SpringApplication.run(CustomerAppApplication.class, args);
+	}
+	@KafkaListener(topics = AppConstants.TOPIC, groupId="group_customer_order")
+	public void kafakSubscriberContent(String order) {
+		System.out.print("_____________ Msg fecthed From Kafka_________________");
+		System.out.println(order);
+
+	}
+
+
+
+}
