@@ -51,5 +51,4 @@ Date
 
 java.util.Date (old version)
 java.sql.Date (Java 8)
-java.util.time (which seems like a typo, likely referring to java.time in Java 8)
 java.time (new version, Java 8)
