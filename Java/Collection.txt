@@ -13,7 +13,7 @@ int x1=10;  String x2 =""+x2;
 or int x1=10; String x2=String.valueIf(x1);
 
 immutable class 
-class should be final,variable private and final,public constructor and only getter method
+class should be final, variable should private and final, public constructor and only getter method
 
 wrapper class
 //primitive to wrapper class
@@ -41,8 +41,9 @@ LinkedHashSet-LH(a,a)SCI
 			  LS(s.s)CI
 			
 ArrayList,LinkedList,LinkedHashMap,LinkedHashSet-----maintains order of insertion(ALLL)
-HashSet ,HashMap , TreeSet, TreeMap -----does not maintains order of insertion(HHTT)
+HashSet,HashMap , TreeSet, TreeMap -----does not maintains order of insertion(HHTT)
 
+note: HashMap does not guarantee to be sorted
 Set operations --->union addAll() , insertion(subset) containsAll() etc
 enum--------------> enum is a special data type which it defines collection of constants
 					it is like pre defined data

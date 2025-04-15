@@ -1,0 +1,121 @@
+Java Logging Overview with SLF4J, Logback, Log4j, Log4j2
+=========================================================
+
+Logger Structure
+----------------
+My Code (uses SLF4J)
+    ↓
+SLF4J API (Interface - org.slf4j has methods like .info(), .error(), .debug(), etc.)
+    ↓
+Logging Framework (with built-in SLF4J binding)
+    → Logback / Log4j / Log4j2
+
+SLF4J
+-----
+- SLF4J stands for Simple Logging Facade for Java.
+- It is NOT a logging framework itself.
+- It provides a common interface (API) for different logging frameworks.
+- Your code stays the same even if you switch the logging backend (e.g., from Logback to Log4j2).
+
+
+
+Logging Frameworks
+-------------------
+- Logback
+- Log4j
+- Log4j2
+- java.util.logging (can be bridged to SLF4J)
+
+Severity Levels (Log Levels)
+============================
+
+From LOW to HIGH severity (One-line definitions):
+
+1. TRACE - Fine-grained debugging information, typically only needed by developers.
+2. DEBUG - Debug-level messages helpful for diagnosing problems during development.
+3. INFO - General informational messages that highlight app progress.
+4. WARN - Potentially harmful situations, but the app is still running fine.
+5. ERROR - Error events that might still allow the application to continue running.
+
+Example 1
+----------------------------
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+@Service
+@Slf4j
+public class MyService {
+    private static final Logger logger = LoggerFactory.getLogger(MyService.class);
+
+    public void doSomething() {
+	int x=10; 
+        logger.trace("Trace log - detailed info {}",x);  //{} placeholder return x value i.e. 10
+        logger.debug("Debug log - useful for debugging");
+        logger.info("Info log - general message");
+        logger.warn("Warn log - something might be wrong");
+        logger.error("Error log - something is broken");
+    }
+}
+
+Example 2
+----------------------------
+@Service
+@Slf4j
+public class MyService {
+
+    private static final Logger log = LoggerFactory.getLogger(MyService.class);
+
+    @Scheduled(fixedRate = 60000) // every 60 seconds
+    public void doSomething() {
+        int x = 10;
+        log.trace("Trace log - detailed info {}", x);
+        log.debug("Debug log - useful for debugging");
+        log.info("Info log - general message");
+        log.warn("Warn log - something might be wrong");
+        log.error("Error log - something is broken");
+    }
+}
+
+Spring Boot Logging Configuration (application.properties)
+==========================================================
+
+# Set your application name
+spring.application.name=demo1
+
+# Set log level for your package
+logging.level.com.demo1.service=TRACE
+
+# Save logs to file
+logging.file.name=logs/app.log
+
+# Overwrite the existing log file on every app start
+logging.file.clean-on-start=true
+
+
+# Customize log format
+#cutoise space and time in the file
+logging.pattern.file=%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+
+##cutoise space and time in the console
+logging.pattern.console=%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n
+
+------------------------------------------------------------
+------------------------------------------------------------
+monitor logger using spring actuator
+
+<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-actuator</artifactId>
+</dependency>
+
+Add in application.properties:
+
+management.endpoints.web.exposure.include=*
+management.endpoint.health.show-details=always
+
+Access:
+
+/actuator/loggers
+/actuator/logfile
+
+
+

@@ -105,9 +105,9 @@ then catch block surpass error
  File not found exception                       NullPointerException 
  sql exception etc			        NumberFormatException  
  
-datatype casting : converting perticular data type to required data type
+datatype casting : converting particular data type to required data type
 Auto upcasting (narrowing) : converting smaller data size to bigger data size
-explicitly down-casting (broadening) : converting bigger data size to samaller data size
+explicitly down-casting (broadening) : converting bigger data size to smaller data size
 
 wrapper class : wrapping values and storing in wrapper class objects
 auto-boxing : wrapping primitive values and storing in wrapper class object
@@ -205,10 +205,12 @@ SIB(static initialize block):It runs before main method
 we did not create object of calling SIB
 SIB runs only once
 it also runs in sequence
+we can initialize only static variable in SIB
+
 
 IIB VS SIB
 IIB -it runs static and non-static both variables
-SIB-it runs static and non-static both variables
+SIB-it runs static  variables only
 
 
 super keyword: it is used only when inheritance is happened

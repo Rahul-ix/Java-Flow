@@ -41,7 +41,7 @@ Servlet : it is a special java class, it can read from html and capable write ba
 
 servlet------>HttpServlet------>GenericServlet
 
-create/update/delete
+---create/update/delete
 html(form )------>webservlet (post)-----JDBC-------->>DB
 
 you need to follow below step to use Create , update , delete
@@ -61,7 +61,8 @@ step 5: define path MySQL connector j
 -----------------close connection--------------
         con.close
 
-read
+----read
+
 WebServlet(get)----->java(write html in java) /write in separate html
  ----path--------
         Class.forName("com.mysql.cj.jdbc.Driver");
@@ -104,11 +105,12 @@ Java servlet page / Jakarta servlet page
 
 .jsp            jsp translator            servlet
 
-overview: jsp contains partial java code and that fixes by jsp translator after it will gives to servlet and then tomcat servlet run
+overview: jsp contains partial java code and that fixes by jsp translator after it will gives to servlet and then tomcat runs servlet 
 
-Tags in jsp
+--Tags in jsp
+
 -Scriplte Tag : it uses inbuilt/implicit objects like out.println <%  int x=10 ; out.println(x);  %> 
-- Declaration Tag: you cannot use here inbuilt/implicit objects like out.println <%! public int x=10; %>
+-Declaration Tag: you cannot use here inbuilt/implicit objects like out.println <%! public int x=10; %>
 -Expression Tag: you cannot use semicolon and more than one statement <%= x %>
 -Directive Tag:  1) Page Directive:  <%@ import   %>
                                     <%= new Date %>
