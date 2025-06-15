@@ -100,7 +100,7 @@ then catch block surpass error
                        |
                       Exception
                       /          \
- Compile Exception(unchecked)   Runtime exception(unchecked exception)  
+ Compile Exception(checked)   Runtime exception(unchecked exception)  
  IO Exception					ArraysOutOfbound exception
  File not found exception                       NullPointerException 
  sql exception etc			        NumberFormatException  

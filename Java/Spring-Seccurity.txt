@@ -1,4 +1,9 @@
 -----------------------------------------------------------------------Spring Security------------------------------------------------------------------------------------------------------
+JWT-Json web token
+It consist 3 Parts
+1. header (types algorithm, types of token like JWT etc)
+2. payload (issuer name, expiry time etc)
+3. Signature(unique key/algorithm key)
 
 How to store encrypted password in DB?
 
@@ -22,7 +27,7 @@ boolean isPasswordMatch = BCrypt.checkpw(registrationDto.getPassword(), registar
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Spring security with JWT
 
-overview:-> -configure url
+overview:-> -create configure package and class name SecurityFilterChain inside class add URL
             -add application.properties
             -create JWTService--->CCIES and RIBVS
             -create JWTFilter
@@ -52,23 +57,23 @@ step2: create @Configuration class to add SecurityConfig now your url are not se
 public class SecurityConfig {
 
 
+   
+    private final JwtFilter jwtFilter;
+
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        //disables no-recommended
         http.csrf().disable().cors().disable();
+//        http.authorizeHttpRequests().anyRequest().permitAll();
         http.addFilterBefore(jwtFilter, AuthorizationFilter.class);
-
-        http.authorizeHttpRequests().requestMatchers("/api/app/users").permitAll()
-                .requestMatchers("/api/app/create").permitAll()
-                .requestMatchers("/api/app/login").hasRole("ADMIN")
+        http.authorizeHttpRequests()
+                .requestMatchers("/app/v1/save").permitAll()
+                .requestMatchers("/app/jwt/transaction").hasRole("OWNER")
+                .requestMatchers("/app/jwt/login").permitAll()
                 .anyRequest().authenticated();
 
         return http.build();
 
-
-        //allow http request
-//        http.authorizeHttpRequests().anyRequest().permitAll();
-
+    
     }
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -76,96 +81,88 @@ step3: add properties in application.properties
 
 jwt.issuer=com.rahul
 jwt.expiry-time=86400000
-jwt.secret-key=dkdnknNknKNknKNNn7567Rf7F7F7f7F772345678!@#$%^&*JbjBJbJb@#$%^BJbBjbKBBKBKbkbkbkbkb
+jwt.key=sbuwbuwbubBuVVvuVU789HBKNknKNnKNYEHH9uw9uwsnsnsknsknsksnksnsksnksnsk
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 step4: ///////////////////create JWTService ////////////////////////////////////
 
 
-@Component
+@Service
 public class JWTService {
 
+    @Value("${jwt.key}")
+    private String algorithmKey;
+
     @Value("${jwt.expiry-time}")
-    private int expiryTime;
+    private long expiry;
 
     @Value("${jwt.issuer}")
     private String issuer;
 
-    @Value("${jwt.secret-key}")
-    private String secretKey;
-
     private Algorithm algorithm;
-    @PostConstruct
-    public  void getConstruct(){
-        algorithm = Algorithm.HMAC256(secretKey);
 
+    @PostConstruct
+    public  void postConstruct(){
+        algorithm=Algorithm.HMAC256(algorithmKey);
     }
 
-    public String genetraeToken(String username){
+    public String generateToken(String username){
         //CCIES
         return JWT.create()
-                .withClaim("name",username)
-                .withExpiresAt(new java.util.Date(System.currentTimeMillis()+expiryTime))
+                .withClaim("username",username)
                 .withIssuer(issuer)
+                .withExpiresAt(new java.util.Date(System.currentTimeMillis()+expiry))
                 .sign(algorithm);
-
     }
 
-    public String verifyUserToken(String token){
-//RIBVS
-        DecodedJWT decodedJWT =JWT.require(algorithm)
-                .withIssuer(issuer)
-                .build()
-                .verify(token);
-
-        String verifyToken= decodedJWT.getClaim("name").asString();
-        return verifyToken;
+    public String verifyToken(String token){
+        //RIBVS
+        DecodedJWT decodedJWT= JWT.require(algorithm).withIssuer(issuer).build().verify(token);
+        return decodedJWT.getClaim("username").asString();
     }
 }
 
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-step6: ///////////////////create JWTFilter component add OnceperRequest operation ////////////////////////////////////
-     @Override
+step6: ///////////////////create JWTFilter  ////////////////////////////////////
+  
+
+ @Configuration
+public class JwtFilter extends OncePerRequestFilter {
+
+    @Autowired
+    JWTService jwtService;
+
+    @Autowired
+    UserRepository userRepository;
+
+    @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-
        String token= request.getHeader("Authorization");
-       if(token!=null && token.startsWith("Bearer ")){
-          String jwttoken= token.substring(7,token.length());
-         String name= jwtService.verifyUserToken(jwttoken);
-        Optional<Registartion> OpverifyedName= registartionRepository.findByName(name);
-        if(OpverifyedName.isPresent()){
-            Registartion registartion =OpverifyedName.get();
-            String role = registartion.getRole(); // Assuming you have a getRole() method in your Registartion class
-
-            // Add "ROLE_" prefix to the role as expected by Spring Security
-//            SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role);
-            SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role);
-
-
-            System.out.println(authority);
-
-//            UsernamePasswordAuthenticationToken authenticationToken=
-//                    new UsernamePasswordAuthenticationToken(registartion,null, Collections.singleton(new SimpleGrantedAuthority(registartion.getName())));
-
-            UsernamePasswordAuthenticationToken authenticationToken =
-                    new UsernamePasswordAuthenticationToken(registartion, null, Collections.singleton(authority));
-
-            authenticationToken.setDetails(new WebAuthenticationDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
-
+        System.out.println(token);
+        if(token!=null && token.startsWith("Bearer ")){
+          String jwtToken= token.substring(7,token.length());
+          String name=jwtService.verifyToken(jwtToken);
+          Optional<User>op=userRepository.findByName(name);
+          if(op.isPresent()){
+              User user = op.get();
+              // Add "ROLE_" prefix to the role as expected by Spring Security
+              String role = user.getRole();
+              SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + role);
+              UsernamePasswordAuthenticationToken authenticationToken=
+                      new UsernamePasswordAuthenticationToken(user,null, Collections.singleton(authority));
+                authenticationToken.setDetails(new WebAuthenticationDetails(request));
+              SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+          }
         }
-
-
-       }
-
-       filterChain.doFilter(request,response);
+filterChain.doFilter(request,response);
     }
+}
 --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
-//check here 
-GET: http://localhost:8080/api/app/login
+//generate token 
+http://localhost:8080/app/jwt/login
 
 {
     "name":"Abhira",
@@ -173,6 +170,14 @@ GET: http://localhost:8080/api/app/login
     "role":"ADMIN"
 }
 
+//transaction(role based)+JWTToken
+http://localhost:8080/app/jwt/transaction
+
+{
+    "name": "Vidya",
+    "password": "12345678",
+    "role": "ADMIN"
+}
 
 --------------------------------------------------------------spring security end----------------------------------------------------------------------------------------------------------
-
+Api endpoints : https://documenter.getpostman.com/view/30113311/2sB2ca7zmV

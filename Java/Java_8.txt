@@ -9,7 +9,7 @@ Functional Interface:
 
 
 lamdas                           it is used single handle method /reduce no of lines code
-                                 List<String> l=Arrays.asList("Ruhi","Abshire","Raj");
+                                 List<String> l=Arrays.asList("Raj","Ram","abc");
                                  l.forEach(name->System.out.println(name));
 
 note : you can use lambda in ---->list,incomplete method(@FunctionalInterface),switch etc
